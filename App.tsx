@@ -1,20 +1,34 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import React from 'react';
+import {
+  View,
+  StatusBar,
+  StyleSheet,
+  useColorScheme,
+  Platform,
+} from 'react-native';
+import Todo from './src/screens/Todo';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
+  // Define consistent colors for both platforms
+  const colors = {
+    background: isDarkMode ? '#121212' : '#ffffff',
+    text: isDarkMode ? '#ffffff' : '#000000',
+    statusBarStyle: isDarkMode ? 'light-content' : 'dark-content',
+    statusBarBackground: isDarkMode ? '#000000' : '#ffffff',
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar
+        barStyle={colors.statusBarStyle}
+        backgroundColor={
+          Platform.OS === 'android' ? colors.statusBarBackground : undefined
+        }
+        translucent={false}
+      />
+      <Todo />
     </View>
   );
 }
@@ -22,6 +36,12 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingHorizontal: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
   },
 });
 

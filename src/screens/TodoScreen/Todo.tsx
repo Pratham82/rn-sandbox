@@ -10,7 +10,7 @@ import {
   useColorScheme,
   Platform,
 } from 'react-native';
-import { TodoType } from '../types';
+import { TodoType } from '../../types';
 import CheckBox from '@react-native-community/checkbox';
 
 export default function Todo() {
@@ -137,6 +137,12 @@ export default function Todo() {
           </View>
         }
       />
+      {/* <View style={newStyles.container}>
+        <TextInput value="" placeholder="enter" style={newStyles.input} />
+        <TouchableOpacity style={newStyles.button}>
+          <Text style={newStyles.buttonText}>Click me</Text>
+        </TouchableOpacity>
+      </View> */}
     </SafeAreaView>
   );
 }
@@ -234,3 +240,29 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+// const newStyles = StyleSheet.create({
+//   container: {
+//     display: 'flex',
+//     flexDirection: 'row',
+//     borderWidth: 1,
+//     borderColor: 'red',
+//     justifyContent: 'space-between',
+//     gap: 6,
+//   },
+//   input: {
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderWidth: 1,
+//     borderRadius: 8,
+//     flex: 1,
+//   },
+//   button: {
+//     padding: 10,
+//     backgroundColor: 'skyblue',
+//     borderRadius: 8,
+//   },
+//   buttonText: {
+//     color: 'white',
+//   },
+// });

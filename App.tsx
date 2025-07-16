@@ -6,7 +6,8 @@ import {
   useColorScheme,
   Platform,
 } from 'react-native';
-import Todo from './src/screens/Todo';
+// import Todo from './src/screens/TodoScreen/Todo';
+import ProductListing from './src/screens/ProductListing/ProductListing';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -19,6 +20,8 @@ function App() {
     statusBarBackground: isDarkMode ? '#000000' : '#ffffff',
   };
 
+  console.log({ name: 'Prathamesh' });
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar
@@ -28,7 +31,8 @@ function App() {
         }
         translucent={false}
       />
-      <Todo />
+      {/* <Todo /> */}
+      <ProductListing />
     </View>
   );
 }

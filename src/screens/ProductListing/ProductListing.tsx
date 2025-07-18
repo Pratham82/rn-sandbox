@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
   useColorScheme,
@@ -19,7 +20,11 @@ export default function ProductListing() {
   console.log('🚀 ~ ProductListing ~ colorScheme:', colorScheme);
 
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [currentView, setCurrentView] = useState<'grid' | 'list'>('grid');
+  // const [currentView, setCurrentView] = useState<'grid' | 'list'>('grid');
+  const [filters, setFilters] = useState({
+    search: '',
+    limit: 15,
+  });
 
   // Dynamic color values
   const isDark = colorScheme === 'dark';
@@ -30,9 +35,10 @@ export default function ProductListing() {
     priceText: isDark ? '#ffffff' : '#000000',
   };
 
-  const fetchProducts = async () => {
+  const fetchProducts = async ({ search = '', limit = 10 }) => {
     try {
-      const res = await fetch(PRODUCTS_URL);
+      const searchParams = new URLSearchParams({ search, limit });
+      const res = await fetch(`${PRODUCTS_URL}?${searchParams}`);
       const data = await res.json();
       setProducts(data.products);
     } catch (e) {
@@ -40,9 +46,16 @@ export default function ProductListing() {
     }
   };
 
+  const onFilterChange = (value: string, type: 'search') => {
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [type]: value,
+    }));
+  };
+
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(filters);
+  }, [filters]);
 
   console.log(products);
 
@@ -53,20 +66,18 @@ export default function ProductListing() {
       <Text style={[styles.heading, { color: colors.text }]}>
         Product Listing
       </Text>
-      <View>
-        <Text style={{ color: colors.text }}>Current View: </Text>
-        {/* <TouchableOpacity
-          onPress={() =>
-            setCurrentView(currentView === 'grid' ? 'list' : 'grid')
-          }
-        >
-          <Icon
-            name={currentView === 'grid' ? 'list' : 'grid'}
-            size={24}
-            color={colors.text}
-          />
-        </TouchableOpacity> */}
-      </View>
+      {/* <View>
+        <Text style={{ color: colors.text }}>Current View: {currentView} </Text>
+      </View> */}
+      <TextInput
+        value={filters.search}
+        style={[
+          styles.inputStyles,
+          { backgroundColor: colors.cardBackground, color: colors.text },
+        ]}
+        placeholder="Search by product..."
+        onChangeText={value => onFilterChange(value, 'search')}
+      />
       <ScrollView
         // style={styles.productGrid}
         contentContainerStyle={styles.productGrid}
@@ -115,6 +126,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
   },
+  inputStyles: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+  },
   productGrid: {
     // display: 'flex',
     // flex: 1,
@@ -126,15 +141,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    justifyContent: 'flex-start',
-    padding: 10,
+    justifyContent: 'space-between',
+    // padding: 1,
+    // borderWidth: 1,
+    // borderColor: 'red',
   },
   productCard: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: 150,
-    width: 110,
+    // width: 120,
+    // width: '100%',
+    // width: '50%',
     borderRadius: 8,
     flexBasis: '48%',
   },

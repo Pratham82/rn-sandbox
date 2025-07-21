@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 // import Todo from './src/screens/TodoScreen/Todo';
 import ProductListing from './src/screens/ProductListing/ProductListing';
+import ProductListingInfinite from './src/screens/ProductListing/ProductListingInfinite';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,7 +33,8 @@ function App() {
         translucent={false}
       />
       {/* <Todo /> */}
-      <ProductListing />
+      {/* <ProductListing /> */}
+      <ProductListingInfinite />
     </View>
   );
 }

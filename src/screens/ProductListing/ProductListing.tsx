@@ -17,13 +17,35 @@ const PRODUCTS_URL =
 
 export default function ProductListing() {
   const colorScheme = useColorScheme();
-  console.log('🚀 ~ ProductListing ~ colorScheme:', colorScheme);
 
-  const [products, setProducts] = useState<ProductType[]>([]);
+  /*
+  {
+    "products": [],
+    "total": 30,
+    "page": 2,
+    "limit": 8,
+    "totalPages": 4
+}
+  */
+
+  const [products, setProducts] = useState<{
+    total: number;
+    products: ProductType[];
+    page: number;
+    limit: number;
+    totalPages: number;
+  }>({
+    limit: 8,
+    page: 1,
+    products: [],
+    total: 0,
+    totalPages: 1,
+  });
   // const [currentView, setCurrentView] = useState<'grid' | 'list'>('grid');
   const [filters, setFilters] = useState({
     search: '',
-    limit: 15,
+    limit: 8,
+    page: 1,
   });
 
   // Dynamic color values
@@ -35,12 +57,13 @@ export default function ProductListing() {
     priceText: isDark ? '#ffffff' : '#000000',
   };
 
-  const fetchProducts = async ({ search = '', limit = 10 }) => {
+  const fetchProducts = async ({ search = '', limit = 8, page = 1 }) => {
     try {
-      const searchParams = new URLSearchParams({ search, limit });
+      const searchParams = new URLSearchParams({ search, limit, page });
       const res = await fetch(`${PRODUCTS_URL}?${searchParams}`);
       const data = await res.json();
-      setProducts(data.products);
+      console.log('🚀 ~ fetchProducts ~ data:', data);
+      setProducts(data);
     } catch (e) {
       console.log(e);
     }
@@ -53,11 +76,16 @@ export default function ProductListing() {
     }));
   };
 
+  const onUpdateChange = (type: 'prev' | 'next') => {
+    setFilters(prev => ({
+      ...prev,
+      page: type === 'next' ? prev.page + 1 : prev.page - 1,
+    }));
+  };
+
   useEffect(() => {
     fetchProducts(filters);
   }, [filters]);
-
-  console.log(products);
 
   return (
     <SafeAreaView
@@ -82,7 +110,7 @@ export default function ProductListing() {
         // style={styles.productGrid}
         contentContainerStyle={styles.productGrid}
       >
-        {products.map((product, index) => {
+        {products.products?.map((product, index) => {
           return (
             <View
               key={product.id}
@@ -110,6 +138,25 @@ export default function ProductListing() {
           );
         })}
       </ScrollView>
+      {/* Pagination */}
+      <View style={styles.paginationContainer}>
+        <TouchableOpacity
+          style={styles.paginationButton}
+          onPress={() => onUpdateChange('prev')}
+          disabled={filters.page === 1}
+        >
+          <Text style={styles.paginationButtonText}>Prev</Text>
+        </TouchableOpacity>
+        <Text>{filters.page}</Text>
+        {/* <TextInput value={filters.page} placeholder="page" /> */}
+        <TouchableOpacity
+          style={styles.paginationButton}
+          onPress={() => onUpdateChange('next')}
+          disabled={products.totalPages === filters.page}
+        >
+          <Text style={styles.paginationButtonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -131,29 +178,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   productGrid: {
-    // display: 'flex',
-    // flex: 1,
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // gap: 8,
-    // justifyContent: 'flex-start',
-
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
     justifyContent: 'space-between',
-    // padding: 1,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   productCard: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: 150,
-    // width: 120,
-    // width: '100%',
-    // width: '50%',
+
     borderRadius: 8,
     flexBasis: '48%',
   },
@@ -168,5 +203,21 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontWeight: '700',
+  },
+  paginationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  paginationButton: {
+    padding: 8,
+    backgroundColor: 'black',
+    borderRadius: 6,
+    color: 'white',
+  },
+  paginationButtonText: {
+    color: 'white',
   },
 });

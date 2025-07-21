@@ -7,8 +7,8 @@ import {
   Platform,
 } from 'react-native';
 // import Todo from './src/screens/TodoScreen/Todo';
-import ProductListing from './src/screens/ProductListing/ProductListing';
-import ProductListingInfinite from './src/screens/ProductListing/ProductListingInfinite';
+import AppNavigator from './src/navigation/AppNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -24,18 +24,18 @@ function App() {
   console.log({ name: 'Prathamesh' });
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <StatusBar
-        barStyle={colors.statusBarStyle}
-        backgroundColor={
-          Platform.OS === 'android' ? colors.statusBarBackground : undefined
-        }
-        translucent={false}
-      />
-      {/* <Todo /> */}
-      {/* <ProductListing /> */}
-      <ProductListingInfinite />
-    </View>
+    <SafeAreaProvider>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <StatusBar
+          barStyle={isDarkMode ? 'dark-content' : 'light-content'}
+          backgroundColor={
+            Platform.OS === 'android' ? colors.statusBarBackground : undefined
+          }
+          translucent={false}
+        />
+        <AppNavigator />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
   },
+  statusBarStyles: {},
 });
 
 export default App;

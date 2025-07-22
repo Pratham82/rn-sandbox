@@ -21,13 +21,11 @@ function App() {
     statusBarBackground: isDarkMode ? '#000000' : '#ffffff',
   };
 
-  console.log({ name: 'Prathamesh' });
-
   return (
     <SafeAreaProvider>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <StatusBar
-          barStyle={isDarkMode ? 'dark-content' : 'light-content'}
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
           backgroundColor={
             Platform.OS === 'android' ? colors.statusBarBackground : undefined
           }

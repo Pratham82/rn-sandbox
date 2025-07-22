@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,22 +10,13 @@ import {
   useColorScheme,
 } from 'react-native';
 import { ProductType } from '../../types';
+import ProductCard from '../../components/ProductCard';
 
-const PRODUCTS_URL =
+export const PRODUCTS_URL =
   'https://mock-api.mali-prathamesh82.workers.dev/api/products';
 
 export default function ProductListing() {
   const colorScheme = useColorScheme();
-
-  /*
-  {
-    "products": [],
-    "total": 30,
-    "page": 2,
-    "limit": 8,
-    "totalPages": 4
-}
-  */
 
   const [products, setProducts] = useState<{
     total: number;
@@ -112,29 +102,7 @@ export default function ProductListing() {
       >
         {products.products?.map((product, index) => {
           return (
-            <View
-              key={product.id}
-              style={[
-                styles.productCard,
-                { backgroundColor: colors.cardBackground },
-              ]}
-            >
-              <Image
-                source={{
-                  uri: product.thumbnail,
-                }}
-                style={styles.productImage}
-              />
-              <Text
-                style={[styles.productText, { color: colors.text }]}
-                numberOfLines={1}
-              >
-                {product.title}
-              </Text>
-              <Text style={[styles.productPrice, { color: colors.priceText }]}>
-                {product.price}
-              </Text>
-            </View>
+            <ProductCard colors={colors} product={product} key={product.id} />
           );
         })}
       </ScrollView>

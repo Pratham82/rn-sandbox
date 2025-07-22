@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  FlatList,
   Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -8,17 +9,15 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native';
 import { ProductType } from '../../types';
-import ProductCard from '../../components/ProductCard';
 
 const PRODUCTS_URL =
   'https://mock-api.mali-prathamesh82.workers.dev/api/products';
 
-export default function ProductListingInfinite() {
+export default function ProductListingFlatList() {
   const colorScheme = useColorScheme();
 
   const [products, setProducts] = useState<{
@@ -123,6 +122,7 @@ export default function ProductListingInfinite() {
         placeholder="Search by product..."
         onChangeText={value => onFilterChange(value, 'search')}
       />
+
       <ScrollView
         contentContainerStyle={styles.productGrid}
         onScroll={handleScroll}
@@ -130,7 +130,29 @@ export default function ProductListingInfinite() {
       >
         {products.products?.map((product, index) => {
           return (
-            <ProductCard colors={colors} product={product} key={product.id} />
+            <View
+              key={product.id}
+              style={[
+                styles.productCard,
+                { backgroundColor: colors.cardBackground },
+              ]}
+            >
+              <Image
+                source={{
+                  uri: product.thumbnail,
+                }}
+                style={styles.productImage}
+              />
+              <Text
+                style={[styles.productText, { color: colors.text }]}
+                numberOfLines={1}
+              >
+                {product.title}
+              </Text>
+              <Text style={[styles.productPrice, { color: colors.priceText }]}>
+                {product.price}
+              </Text>
+            </View>
           );
         })}
         {loading && (

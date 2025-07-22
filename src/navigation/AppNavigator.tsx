@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScree/HomeScreen';
 import ProductListing from '../screens/ProductListing/ProductListing';
 import ProductListingInfinite from '../screens/ProductListing/ProductListingInfinite';
 import Todo from '../screens/TodoScreen/Todo';
+import ProductDetails from '../screens/ProductDetails/ProductDetails';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -28,6 +29,9 @@ export default function AppNavigator() {
           name="ProductListingInfinite"
           component={ProductListingInfinite}
         />
+        <Stack.Screen name="ProductDetails">
+          {props => <ProductDetails {...props} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -37,4 +37,11 @@ export interface Meta {
   updatedAt: string;
 }
 
+export type Colors = {
+  background: string;
+  text: string;
+  cardBackground: string;
+  priceText: string;
+};
+
 export type { TodoType };
